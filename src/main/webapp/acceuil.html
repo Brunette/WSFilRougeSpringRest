@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script type="text/javascript" src="script.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body onload="charger_films()">
+	<h2>Liste des films</h2>
+	<div id="liste_film"></div>
+
+	<p id="message_holder"></p>
+	
+		<div id="id_NewFilm" class="NewFilm">
+			<div class="filmheader">
+				<h3>New Film Title: <input type="text" name="title"/></h3>
+			</div>
+			<label>Duration: </label><input class="duration" name="duration"></input>
+			<div class="filmbody">
+				<textarea rows="15" cols="40"></textarea>
+				<label>Thumbnail link: </label><input type="text" name="thumblink"/>
+				<input type="button" onclick="ajouter_film()" value="Ajouter un film" />
+			</div>
+			<div id="genresbox_new" class="genrebox">
+			</div>
+			<input type="text" id="newgenre_new" name="newgenre" placeholder="New Genre" />
+			<input type="button" name="newgenrebtn" onclick="ajouter_genre('new')" value="Add"/>
+			
+		</div>
+
+	<template id="filmbox_template">
+		<div class="filmbox">
+			<div class="filmheader">
+				<h3>Title: <input type="text" name="title"/></h3>
+			</div>
+			<label>Duration: </label><input class="duration" name="duration"></input>
+			<div class="filmbody">
+				<textarea rows="15" cols="40"></textarea>
+				<img src="movie/thumblink" alt="" width="162" height="240">
+				<input type="text" name="thumblink"/>
+				<input type="button" onclick="modifier_film()" name="modif_film"
+					value="Update" /> 				<input type="button" onclick="supprimer_film()" name="delete_film"
+					value="Delete" />
+			</div>
+			<div class="genrebox">
+			</div>
+			<input type="text" id="" name="newgenre" placeholder="New Genre" />
+			<input type="button" name="newgenrebtn" onclick="ajouter_genre()" value="Add"/>
+		</div>
+	</template>
+</body>
+</html>

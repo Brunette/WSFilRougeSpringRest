@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/data/jpa
+    http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd">
+
+	<!-- Permet l'utilisation des annotations pour l'injection de dependances -->
+	<context:annotation-config />
+
+	<!-- Permet de specifier dans quels packages se trouvent les classes a injecter 
+		Il s'agit des classes annotees avec @Component, @Repository, @Service, @Controller 
+		Utilise uniquement par spring core pour faire de l'injection de dependance -->
+	<context:component-scan
+		base-package="bll;bo;dal;rest"></context:component-scan>
+
+
+	<!-- Externaliser les parametres -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="WEB-INF/datasource.properties" />
+	</bean>
+
+	<!-- Creation du datasource (l'element qui contient les infos de connexion 
+		a la bdd -->
+	<bean id="datasource"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${driver}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${user}" />
+		<property name="password" value="${pass}" />
+	</bean>
+
+	<!-- Creation de l'entitymanagefactory qui gere les connexions a la bdd -->
+	<bean id="emf"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<!-- Utilise par Hibernate pour reconnaitre les entity a persister en bdd -->
+		<property name="packagesToScan">
+			<list>
+				<value>bo</value>
+			</list>
+		</property>
+
+		<property name="dataSource" ref="datasource"></property>
+
+		<property name="jpaVendorAdapter">
+			<bean
+				class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+				<property name="database" value="MYSQL" />
+			</bean>
+		</property>
+
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.enable_lazy_load_no_trans">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Configuration du transactionManager pour permettre l'utilisation du 
+		@Transactional -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="emf" />
+	</bean>
+
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+
+	<mvc:annotation-driven />
+
+	<jpa:repositories base-package="dal"
+		entity-manager-factory-ref="emf" />
+</beans>
