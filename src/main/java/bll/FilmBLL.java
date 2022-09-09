@@ -2,35 +2,46 @@ package bll;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import bo.Film;
 import dal.FilmDAO;
-import dal.FilmDAOHibernateImpl;
 
+@Service
 public class FilmBLL {
+	@Autowired
 	private FilmDAO dao;
 
 	public FilmBLL() {
-		dao = new FilmDAOHibernateImpl();
 	}
 
 	public List<Film> selectAll() {
-		return dao.selectAll();
+		return dao.findAll();
 	}
 
 	public Film selectById(int id) {
-		return dao.selectById(id);
+		return dao.findById(id).get();
 	}
 
 	public void insert(Film film) {
-		dao.insert(film);
+		dao.save(film);
 	}
 
 	public void update(Film film) {
-		dao.update(film);
+		dao.save(film);
 	}
 
-	public void deleteById(int id) {
+	public void delete(Film film) {
+		dao.delete(film);
+	}
+
+	public void delete(int id) {
 		dao.deleteById(id);
+	}
+
+	public boolean contains(int id) {
+		return dao.existsById(id);
 	}
 
 }

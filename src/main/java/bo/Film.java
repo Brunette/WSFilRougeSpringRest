@@ -12,15 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "films")
-@NamedQueries({ @NamedQuery(name = "trouverTousFilms", query = "SELECT f FROM Film f"),
-		@NamedQuery(name = "trouverFilmById", query = "SELECT f FROM Film f WHERE f.id = :id"),
-		@NamedQuery(name = "supprimerFilmById", query = "DELETE from Film WHERE id = :id") })
 public class Film {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

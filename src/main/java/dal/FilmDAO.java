@@ -1,17 +1,11 @@
 package dal;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import bo.Film;
 
-public interface FilmDAO {
-	List<Film> selectAll();
+@Repository
+public interface FilmDAO extends JpaRepository<Film, Integer> {
 
-	Film selectById(int id);
-
-	void insert(Film film);
-
-	void update(Film film);
-
-	void deleteById(int id);
 }
